@@ -5,7 +5,7 @@
 		"description": "Colección multiservicio para BIK.\n\nIncluye:\n- Admin Server (Express) en {{admin_base_url}} (JWT Bearer)\n- Core Banking (.NET) en {{core_banking_base_url}}\n- Audit Service (.NET) en {{audit_base_url}}\n\nMódulo Favoritos omitido (vacío).\n\nConvención: cada solicitud tiene un nombre corto en español que describe lo que hace.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "48421810",
-		"_collection_link": "https://olivmer765-3228389.postman.co/workspace/Oliver-Team's-Workspace~e5396a9a-97bc-40d3-8c29-b0e8abc59a9f/collection/48421810-20463375-3b4d-41bc-bc24-b1d659b90b74?action=share&source=collection_link&creator=48421810"
+		"_collection_link": "https://go.postman.co/collection/48421810-20463375-3b4d-41bc-bc24-b1d659b90b74?source=collection_link"
 	},
 	"item": [
 		{
@@ -342,7 +342,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"dpi\": \"1234567890123\",\n  \"typeAcount\": \"Ahorro\",\n  \"earningsM\": 1500.5,\n  \"nameAccount\": \"Cuenta QA {{$timestamp}}\",\n  \"email\": \"qa{{$timestamp}}@mail.com\",\n  \"phoneNumber\": \"+50255554444\"\n}"
+									"raw": "{\n  \"dpi\": \"1234567890123\",\n  \"typeAcount\": \"Monetaria\",\n  \"earningsM\": 1500.5,\n  \"nameAccount\": \"Cuenta QA {{$timestamp}}\",\n  \"email\": \"qa{{$timestamp}}@mail.com\",\n  \"phoneNumber\": \"+50255554222\"\n}"
 								},
 								"url": {
 									"raw": "{{admin_base_url}}/accounts/{{user_id}}",
@@ -465,7 +465,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"accountId\": \"{{account_id}}\",\n  \"amount\": 500,\n  \"description\": \"Abono QA\",\n  \"originSource\": \"Ventanilla\"\n}"
+									"raw": "{\n  \"accountId\": \"69a486331134cdf5242ea632\",\n  \"amount\": 500,\n  \"description\": \"Abono QA\"\n}"
 								},
 								"url": {
 									"raw": "{{admin_base_url}}/deposits",
@@ -561,7 +561,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"sourceAccountId\": \"{{account_id}}\",\n  \"destinationAccountId\": \"{{account_id}}\",\n  \"amount\": 10,\n  \"description\": \"Transfer QA\"\n}"
+									"raw": "{\n  \"sourceAccountId\": \"69a486331134cdf5242ea632\",\n  \"destinationAccountId\": \"69a486411134cdf5242ea638\",\n  \"amount\": 100.00,\n  \"description\": \"Transfer QA\"\n}"
 								},
 								"url": {
 									"raw": "{{admin_base_url}}/transactions/transfer",
@@ -593,7 +593,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"sourceAccountId\": \"{{account_id}}\",\n  \"amount\": 25,\n  \"typeService\": \"Internet\",\n  \"nameService\": \"Pago de servicios\",\n  \"numberAccountPay\": \"INT-9988\",\n  \"methodPayment\": \"Bancaria\"\n}"
+									"raw": "{\n  \"sourceAccountId\": \"69a486331134cdf5242ea632\",\n  \"amount\": 250,\n  \"typeService\": \"Internet\",\n  \"nameService\": \"Pago de servicios\",\n  \"numberAccountPay\": \"INT-9988\",\n  \"methodPayment\": \"Bancaria\"\n}"
 								},
 								"url": {
 									"raw": "{{admin_base_url}}/transactions/pay-service",
@@ -797,20 +797,57 @@
 									}
 								],
 								"url": {
-									"raw": "{{admin_base_url}}/services/{{service_id}}/CANCELED",
+									"raw": "{{admin_base_url}}/services/{{service_id}}/COMPLETED",
 									"host": [
 										"{{admin_base_url}}"
 									],
 									"path": [
 										"services",
 										"{{service_id}}",
-										"CANCELED"
+										"COMPLETED"
 									]
 								}
 							},
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Currency Service",
+			"item": [
+				{
+					"name": "Obtener conversión",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"from\": \"USD\",\n    \"to\": \"GTQ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{admin_base_url}}/currencies/convert",
+							"host": [
+								"{{admin_base_url}}"
+							],
+							"path": [
+								"currencies",
+								"convert"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -900,6 +937,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{core_banking_base_url}}/accounts/1/balance",
+							"host": [
+								"{{core_banking_base_url}}"
+							],
+							"path": [
+								"accounts",
+								"1",
+								"balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "History",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -944,13 +1008,16 @@
 							}
 						],
 						"url": {
-							"raw": "{{audit_base_url}}/api/Audit",
+							"raw": "{{audit_base_url}}/BIK/v1/accounts/1/history",
 							"host": [
 								"{{audit_base_url}}"
 							],
 							"path": [
-								"api",
-								"Audit"
+								"BIK",
+								"v1",
+								"accounts",
+								"1",
+								"history"
 							]
 						}
 					},
