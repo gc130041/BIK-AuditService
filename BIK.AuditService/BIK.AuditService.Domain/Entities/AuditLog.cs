@@ -1,21 +1,16 @@
-using System.ComponentModel.DataAnnotations;
+using System;
 
-namespace BIK.AuditService.DTOs
+namespace BIK.AuditService.Domain.Entities
 {
-    public class AuditLogDto
+    public class AuditLog
     {
-        [Required]
+        public int Id { get; set; }
         public string ActionType { get; set; } = string.Empty;
-
         public string Description { get; set; } = string.Empty;
-
         public int? AccountId { get; set; }
-
         public string? UserId { get; set; }
-
-        [Required]
         public string Severity { get; set; } = "Info";
-
-        public string SourceIpAddress { get; set; } = string.Empty;
+        public string SourceIpAddress { get; set; } = "127.0.0.1";
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }
