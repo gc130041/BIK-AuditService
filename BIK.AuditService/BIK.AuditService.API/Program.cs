@@ -29,4 +29,29 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<BIK.AuditService.Infrastructure.Data.AuditDbContext>();
+
+    int retries = 0;
+    while (retries < 10)
+    {
+        try
+        {
+            Console.WriteLine($"Intentando conectar a Auditoría (Intento {retries + 1}/10)...");
+            context.Database.EnsureCreated();
+            Console.WriteLine("Base de datos de Auditoría lista.");
+            break;
+        }
+        catch (Exception)
+        {
+            retries++;
+            if (retries >= 10) throw;
+            Console.WriteLine("Postgres (Auditoría) no responde. Reintentando...");
+            Thread.Sleep(3000);
+        }
+    }
+}
+
 app.Run();
